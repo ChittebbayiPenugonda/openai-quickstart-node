@@ -26,28 +26,7 @@ export default function Home() {
      
     const responseData = await response.json();
     data.unshift({prompt: animalInput, response: responseData.result});
-    //searchQuery.unshift(animalInput);
 
-    /*myData.push({prompt: animalInput, result: data.result});
-    const children = myData.map((val) => (
-      React.createElement("div", {className: "listElem"}, val["name"])
-  ));*/
-
- // const oldContent = document.getElementById('list').innerHTML;
-
-
- //INCASE
-   /* const newEntry = (
-      <div className={styles.listInner}>
-        <div >{data.map(result=> (
-        <div className={styles.listElement}>
-        <p>Prompt: {searchQuery[data.indexOf(result)]}</p>
-        <p  key={result}>Result: {result}</p>
-        </div>
-        ))}</div>
-
-   //   </div>
-   // )*/
   const newEntry = (
    <div className={styles.listInner}>
    <div >{data.map(val=> (
@@ -58,9 +37,7 @@ export default function Home() {
    ))}</div>
    </div>
   );
-    //setResult("<p>Prompt: " + animalInput + "</p><p> Result: " + data.result  + "</p>"+ result);
-    //const list = document.getElementById('list');
-    //list.appendChild(newEntry);
+
     
    reactDom.render(newEntry, document.getElementById('list'));
     setAnimalInput("");
