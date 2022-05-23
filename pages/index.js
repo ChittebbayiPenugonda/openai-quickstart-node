@@ -1,22 +1,68 @@
 import Head from "next/head";
 import { useState } from "react";
+import reactDom from "react-dom";
 import styles from "./index.module.css";
+
+const data = [];
+const searchQuery = [];
 
 export default function Home() {
   const [animalInput, setAnimalInput] = useState("");
-  const [result, setResult] = useState();
+  const [results, setResults] = useState([]);
+  
 
+  const myData = [];
+  console.log(data)
   async function onSubmit(event) {
     event.preventDefault();
+    
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ animal: animalInput }),
+      body: JSON.stringify({ input: animalInput }),
     });
-    const data = await response.json();
-    setResult(data.result);
+     
+    const responseData = await response.json();
+    data.unshift({prompt: animalInput, response: responseData.result});
+    //searchQuery.unshift(animalInput);
+
+    /*myData.push({prompt: animalInput, result: data.result});
+    const children = myData.map((val) => (
+      React.createElement("div", {className: "listElem"}, val["name"])
+  ));*/
+
+ // const oldContent = document.getElementById('list').innerHTML;
+
+
+ //INCASE
+   /* const newEntry = (
+      <div className={styles.listInner}>
+        <div >{data.map(result=> (
+        <div className={styles.listElement}>
+        <p>Prompt: {searchQuery[data.indexOf(result)]}</p>
+        <p  key={result}>Result: {result}</p>
+        </div>
+        ))}</div>
+
+   //   </div>
+   // )*/
+  const newEntry = (
+   <div className={styles.listInner}>
+   <div >{data.map(val=> (
+   <div className={styles.listElement}>
+   <p>Prompt: {val["prompt"]}</p>
+   <p>Result: {val["response"]}</p>
+   </div>
+   ))}</div>
+   </div>
+  );
+    //setResult("<p>Prompt: " + animalInput + "</p><p> Result: " + data.result  + "</p>"+ result);
+    //const list = document.getElementById('list');
+    //list.appendChild(newEntry);
+    
+   reactDom.render(newEntry, document.getElementById('list'));
     setAnimalInput("");
   }
 
@@ -28,19 +74,20 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <img src="/dog.png" className={styles.icon} />
-        <h3>Name my pet</h3>
+        <h3>Enter a Prompt</h3>
         <form onSubmit={onSubmit}>
           <input
             type="text"
             name="animal"
-            placeholder="Enter an animal"
+            placeholder="Enter your prompt"
             value={animalInput}
             onChange={(e) => setAnimalInput(e.target.value)}
           />
-          <input type="submit" value="Generate names" />
+          <input type="submit" value="Run AI" />
         </form>
-        <div className={styles.result}>{result}</div>
+        <div id="list" className='list'>
+
+        </div>
       </main>
     </div>
   );
